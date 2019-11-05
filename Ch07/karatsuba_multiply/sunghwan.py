@@ -1,6 +1,10 @@
-# O(N ^ 2)
+"""Karatsuba multiplication algorithm with humanized one too
+
+"""
+# 이런 `정규화`라는 이름의 기가막힌 작명법은 좀 보고 배우고 싶다...
 def normalize(num):
     num.append(0)
+
     for i in range(len(num)-1):
         if num[i] < 0:
             borrow = (abs(num[i]) + 9) // 10
@@ -14,8 +18,10 @@ def normalize(num):
         num.pop()
 
 
-def normal_multiply(arr1, arr2):
-    arr1, arr2 = arr1[::-1], arr2[::-1]
+# O(N ^ 2)
+def multiply_naive(arr1, arr2):
+    arr1 = arr1[::-1]
+    arr2 = arr2[::-1]
     ret = [0] * (len(arr1) + len(arr2))
 
     for i in range(len(arr1)):
@@ -23,51 +29,72 @@ def normal_multiply(arr1, arr2):
             ret[i+j] += arr1[i] * arr2[j]
 
     normalize(ret)
-    return ret[::-1]
-
-
-# O(N^log3)
-def karatsuba_multiply(arr1, arr2):
-    N1, N2 = len(arr1), len(arr2)
-
-    def add_to(a, b, k):
-        for i in range(len(b)):
-            if i + k >= len(a):
-                a.append(b[i])
-            else:
-                a[i+k] += b[i]
-
-    def sub_from(a, b):
-        print(len(a), len(b))
-        for i in range(len(b)):
-            a[i] -= b[i]
-
-    # base cases
-    if N1 < N2:
-        return karatsuba_multiply(arr2, arr1)
-    if N1 == 0 or N2 == 0:
-        return []
-    if N1 <= 50:
-        return normal_multiply(arr1, arr2)
-
-    half = N1 // 2
-    a0, a1 = arr1[:half], arr1[half:]
-    b0 = arr2[:min(N2, half)]
-    b1 = arr2[min(N2, half):]
-
-    z2 = karatsuba_multiply(a1, b1)
-    z0 = karatsuba_multiply(a0, b0)
-
-    add_to(a0, a1, 0)
-    add_to(b0, b1, 0)
-
-    z1 = karatsuba_multiply(a0, b0)
-    sub_from(z1, z0)
-    sub_from(z1, z2)
-
-    ret = [0] * (N1 + N2)
-    add_to(ret, z0, 0)
-    add_to(ret, z1, half)
-    add_to(ret, z2, half * 2)
-    normalize(ret)
+    ret = ret[::-1]
     return ret
+
+
+def karatsuba_multiply(arr1, arr2, to_string=False):
+    arr1 = arr1[::-1]
+    arr2 = arr2[::-1]
+
+    def add_to(arr1, arr2, k=0):
+        for idx, n2 in enumerate(arr2):
+            if idx + k >= len(arr1):
+                arr1.append(n2)
+            else:
+                arr1[idx+k] += n2
+
+    def sub_from(arr1, arr2):
+        for i in range(len(arr2)):
+            arr1[i] -= arr2[i]
+
+    def multiply(a, b):
+        AN, BN = len(a), len(b)
+
+        # base cases
+        if AN < BN:
+            return multiply(b, a)
+        elif AN == 0 or BN == 0:
+            return []
+        elif AN <= 50:
+            ret = [0] * (AN + BN)
+
+            for i in range(AN):
+                for j in range(BN):
+                    ret[i+j] += a[i] * b[j]
+
+            return ret
+
+        # do your job
+        half = AN // 2
+        a0, a1 = a[:half], a[half:]
+        b0, b1 = b[:min(BN, half)], b[min(BN, half):]
+        # 사실 여기는 그냥 half 써도 됨.
+        # 파이썬 슬라이싱의 특징: 인덱스 넘겨도 에러 안 난다.
+
+        z2 = multiply(a1, b1)
+        z0 = multiply(a0, b0)
+
+        add_to(a0, a1)
+        add_to(b0, b1)
+
+        z1 = multiply(a0, b0)
+
+        sub_from(z1, z0)
+        sub_from(z1, z2)
+
+        ret = []
+        add_to(ret, z0)
+        add_to(ret, z1, half)
+        add_to(ret, z2, half+half)
+        return ret
+
+
+    ret = multiply(arr1, arr2)
+    normalize(ret)
+    ret = ret[::-1]
+
+    if to_string:
+        return ''.join(str(n) for n in ret)
+    else:
+        return ret
