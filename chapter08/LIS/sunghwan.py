@@ -30,6 +30,7 @@ def lis(arr):
                 nxt.append(arr[j])
 
         ret = max(ret, 1 + lis(nxt))
+    return ret
 
 
 # dynamic programming
