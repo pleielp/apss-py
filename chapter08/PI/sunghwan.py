@@ -31,6 +31,7 @@ def judge(pi, lo, hi):
                 return 10
             d += 2
 
+        d = 2
         while i + 1 + d <= hi:
             if pi[lo+1+d] != pi[lo+1]:
                 return 10
