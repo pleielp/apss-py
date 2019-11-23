@@ -10,6 +10,7 @@ sys.setrecursionlimit(10 ** 4)
 input = sys.stdin.readline
 
 
+# 매일 직접 기우제를 지내면서 푸는 풀이
 def get_possibility(N, M, p):
     cache = [[-1] * N for _ in range(M)]
 
@@ -30,6 +31,18 @@ def get_possibility(N, M, p):
         return 1
     else:
         return move_on(0, 0)
+
+
+# 확률 이론 기반 풀이
+def get_possibility(N, M, p):  # M: 기회
+    if N <= M:
+        return 1
+
+    ret = 0
+    for r in range(N-M, M+1):
+        ret += factorial(M) / (factorial(r) * factorial(M-r)) * (p ** r) * ((1 - p) ** (M-r))
+
+    return ret
 
 
 if __name__ == "__main__":
