@@ -30,7 +30,6 @@ def solution(board, origin_block):
     generateRotations(origin_block)
     block_size = len(rotations[0])
     rotations = list(set(rotations))
-
     boardHeight, boardWidth = len(board), len(board[0])
 
     covered = [
@@ -55,14 +54,16 @@ def solution(board, origin_block):
         return True
 
     best = 0
+    emptys = 0
+
+    for i in range(boardHeight):
+        for j in range(boardWidth):
+            if covered[i][j] == 0:
+                emptys += 1
 
     def search(placed):
-        nonlocal best
-        emptys = 0
-        for i in range(boardHeight):
-            for j in range(boardWidth):
-                if covered[i][j] == 0:
-                    emptys += 1
+        nonlocal best, emptys
+
         if best - placed >= emptys // block_size:
             return
 
@@ -81,12 +82,16 @@ def solution(board, origin_block):
 
         for i in range(len(rotations)):
             if set_block(r, c, rotations[i], 1):
+                emptys -= block_size
                 search(placed + 1)
                 set_block(r, c, rotations[i], -1)
+                emptys += block_size
 
         covered[r][c] = 1
+        emptys -= 1
         search(placed)
         covered[r][c] = 0
+        emptys += 1
 
     search(0)
     return best
