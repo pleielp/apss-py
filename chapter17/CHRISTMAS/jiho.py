@@ -1,8 +1,6 @@
 from collections import Counter
 
 MOD = 20091101
-
-
 def solution(boxs, child):
     def get_psum(array):
         ret = [0] * len(array)
@@ -26,10 +24,11 @@ def solution(boxs, child):
 
     def find_max_order(idx):
 
-        if idx >= len(boxs):
+        if idx == len(boxs):
             return 0
 
-        if idx != -1 and cache[idx] != -1:
+        if cache[idx] != -1:
+            print(idx)
             return cache[idx]
 
         ret = 0
@@ -44,8 +43,7 @@ def solution(boxs, child):
                 break
         ret = max(ret, find_max_order(idx + 1))
 
-        if idx != -1:
-            cache[idx] = ret
+        cache[idx] = ret
         return ret
 
     order_count = find_orders()
