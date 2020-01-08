@@ -1,3 +1,8 @@
+"""Get substrings which are both prefixes and suffixes of an original string
+
+url: https://algospot.com/judge/problem/read/NAMING
+ID : NAMING
+"""
 def kmp(haystack, needle):
     H, N = len(haystack), len(needle)
     begin = matched = 0
