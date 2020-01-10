@@ -1,4 +1,4 @@
-2
+3
 3
 abbab
 babab
@@ -8,3 +8,6 @@ bbaba
 RMDCMRCD
 MRCDRMDC
 DCMRCDRM
+1
+aabaa
+aaaba
