@@ -1,0 +1,13 @@
+3
+3
+abbab
+babab
+ababb
+bbaba
+2
+RMDCMRCD
+MRCDRMDC
+DCMRCDRM
+1
+aabaa
+aaaba
