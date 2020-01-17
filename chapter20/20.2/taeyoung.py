@@ -37,3 +37,5 @@ def kmp_search(H, N):
 
 
 print(kmp_search('aabaabaabac', 'aabaabac'))
+print(kmp_search('abcde', 'eabcd'))
+print(kmp_search('abbab', 'babab'))

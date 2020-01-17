@@ -32,7 +32,7 @@ def kmp_search(H, N):
             else:
                 begin += matched - pi[matched-1]
                 matched = pi[matched-1]
-
+                
     return ret
 
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
             state_next = input().strip()
             diff = kmp_search(state_next * 2, state_now)[0]
             if is_clockwise:
-                ans += diff
+                ans += diff 
             else:
                 ans += len(state_now) - diff
 
