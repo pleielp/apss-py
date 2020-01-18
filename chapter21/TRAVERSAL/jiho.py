@@ -7,7 +7,7 @@ def solution(origin_preorder: list, origin_inorder: list):
             return
         root = preorder[0]
 
-        i = origin_inorder.index(root)
+        i = inorder.index(root)
         print_postorder(preorder[1 : i + 1], inorder[:i])
         print_postorder(preorder[i + 1 :], inorder[i + 1 :])
         ret.append(root)
